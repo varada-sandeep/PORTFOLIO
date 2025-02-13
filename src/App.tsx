@@ -301,7 +301,9 @@ function App() {
 
       <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 flex flex-col space-y-4">
         <motion.a
-          href="#"
+          href="https://github.com/varada-sandeep"
+          target="_blank"  // Add this line
+          rel="noopener noreferrer"  // Add this line for security reasons
           whileHover={{ scale: 1.2, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           className={`p-3 rounded-full ${
@@ -313,7 +315,9 @@ function App() {
           <Github className="w-6 h-6" />
         </motion.a>
         <motion.a
-          href="https://github.com/varada-sandeep"
+          href="https://www.linkedin.com/in/varada-sandeep-a72446260/"
+          target="_blank"  // Add this line
+          rel="noopener noreferrer"  // Add this line for security reasons
           whileHover={{ scale: 1.2, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           className={`p-3 rounded-full ${
@@ -325,7 +329,9 @@ function App() {
           <Linkedin className="w-6 h-6" />
         </motion.a>
         <motion.a
-          href="#"
+          href="https://www.instagram.com/sandeepvarada4/?__pwa=1"
+          target="_blank"  // Add this line
+          rel="noopener noreferrer"  // Add this line for security reasons
           whileHover={{ scale: 1.2, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           className={`p-3 rounded-full ${
