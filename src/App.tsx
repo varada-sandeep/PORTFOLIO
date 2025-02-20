@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen } from 'lucide-react';
+import axios from 'axios';
 
 function App() {
-  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [selectedSkill, setSelectedSkill] = useState<null | {
+    icon: JSX.Element;
+    name: string;
+    description: string;
+    projects: {
+      title: string;
+      description: string;
+      image: string;
+      video?: string;
+    }[];
+  }>(null);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollY, scrollYProgress } = useScroll();
-  const [ref, inView] = useInView({
+  const [ref] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
@@ -17,7 +28,7 @@ function App() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: e.clientX / window.innerWidth,
         y: e.clientY / window.innerHeight,
@@ -561,19 +572,19 @@ function App() {
                   <div className="flex items-center">
                     <Mail className="w-6 h-6 mr-4 text-blue-400" />
                     <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                      email@example.com
+                      sandeepvarada4@gmail.com
                     </p>
                   </div>
                   <div className="flex items-center">
                     <Phone className="w-6 h-6 mr-4 text-blue-400" />
                     <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                      +1 234 567 890
+                      +91 93911 32531
                     </p>
                   </div>
                   <div className="flex items-center">
                     <MapPin className="w-6 h-6 mr-4 text-blue-400" />
                     <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                      Your Location
+                      Chennai
                     </p>
                   </div>
                 </div>
@@ -581,10 +592,32 @@ function App() {
               <motion.form
                 variants={slideFromRight}
                 className="space-y-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target as HTMLFormElement);
+                  const name = formData.get('name') as string;
+                  const email = formData.get('email') as string;
+                  const message = formData.get('message') as string;
+                  console.log(name, email, message);
+                  axios.post('/send-email', {
+                    name,
+                    email,
+                    message,
+                  })
+                    .then(response => {
+                      alert(response.data.message); // Show success message
+                    })
+                    .catch(error => {
+                      alert('Failed to send email. Please try again later.'); // Show error message
+                      console.error('Error sending email:', error);
+                    });
+                
+                  }}
               >
                 <div>
                   <input
                     type="text"
+                    name="name"
                     placeholder="Your Name"
                     className={`w-full px-4 py-3 rounded-lg ${
                       isDarkTheme
@@ -596,6 +629,7 @@ function App() {
                 <div>
                   <input
                     type="email"
+                    name="email"
                     placeholder="Your Email"
                     className={`w-full px-4 py-3 rounded-lg ${
                       isDarkTheme
@@ -607,6 +641,7 @@ function App() {
                 <div>
                   <textarea
                     placeholder="Your Message"
+                    name="message"
                     rows={4}
                     className={`w-full px-4 py-3 rounded-lg ${
                       isDarkTheme
