@@ -603,6 +603,8 @@ function App() {
                     name,
                     email,
                     message,
+                  }, {
+                    headers: { 'Content-Type': 'application/json' }  // Ensure JSON format
                   })
                     .then(response => {
                       alert(response.data.message); // Show success message
