@@ -599,7 +599,7 @@ function App() {
                   const email = formData.get('email') as string;
                   const message = formData.get('message') as string;
                   console.log(name, email, message);
-                  axios.post('/send-email', {
+                  axios.post('https://backend-shxl.onrender.com/send-email', {
                     name,
                     email,
                     message,
