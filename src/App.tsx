@@ -3,7 +3,6 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer';
 import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen } from 'lucide-react';
 import axios from 'axios';
-import { link } from 'framer-motion/client';
 
 function App() {
   const [selectedSkill, setSelectedSkill] = useState<null | {
