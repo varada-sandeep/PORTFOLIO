@@ -109,19 +109,13 @@ function App() {
 
   const publications = [
     {
-      title: "Machine Learning in IoT Applications",
-      journal: "International Journal of Technology",
+      title: "Crafting Customer Segmentation Strategies for Advanced Recommendation System",
+      journal: "2024 Third International Conference on Electrical, Electronics, Information and Communication Technologies (ICEEICT)",
       year: 2024,
-      link: "#",
-      description: "Research on implementing ML algorithms in IoT devices for real-time data processing."
+      link: "https://ieeexplore.ieee.org/document/10718371",
+      description: "Research on implementing ML algorithms for customer segmentation to enhance recommendation systems.",
     },
-    {
-      title: "Automated Testing Framework for Python Applications",
-      journal: "Journal of Software Engineering",
-      year: 2023,
-      link: "#",
-      description: "Novel approach to automated testing in Python applications using AI."
-    }
+    
   ];
 
   const skills = [
