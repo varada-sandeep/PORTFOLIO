@@ -177,7 +177,7 @@ function App() {
           title: 'Led-Blinking-using-fingers-with-cv2-and-pyfiramates',
           description: 'This project uses computer vision to detect hand gestures and control LEDs connected to an Arduino board. It combines OpenCV, CVZone’s hand tracking, and Python for real-time gesture-based interaction.',
           image: 'https://raw.githubusercontent.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates/refs/heads/main/led_blinking.jpg',
-          video: 'www.github.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates',
+          video: 'https://github.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates.git',
         }
       ]
     }
