@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer';
 import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen } from 'lucide-react';
 import axios from 'axios';
+import { link } from 'framer-motion/client';
 
 function App() {
   const [selectedSkill, setSelectedSkill] = useState<null | {
@@ -172,7 +173,14 @@ function App() {
       icon: <Laptop className="w-8 h-8" />,
       name: 'IoT',
       description: 'Working with IoT devices and sensor integration.',
-      projects: []
+      projects: [
+        {
+          title: 'Led-Blinking-using-fingers-with-cv2-and-pyfiramates',
+          description: 'This project uses computer vision to detect hand gestures and control LEDs connected to an Arduino board. It combines OpenCV, CVZone’s hand tracking, and Python for real-time gesture-based interaction.',
+          image: 'https://raw.githubusercontent.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates/refs/heads/main/led_blinking.jpg',
+          video: 'www.github.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates',
+        }
+      ]
     }
   ];
 
@@ -731,7 +739,7 @@ function App() {
                             className="inline-flex items-center text-blue-400 hover:text-blue-300 mt-4"
                           >
                             <ExternalLink className="w-4 h-4 mr-2" />
-                            Watch Demo
+                            Project Link/Project Video
                           </a>
                         )}
                       </div>
