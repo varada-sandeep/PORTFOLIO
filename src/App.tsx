@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen } from 'lucide-react';
+import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen, Briefcase, Clock, Users, Star } from 'lucide-react';
 import axios from 'axios';
 
 function App() {
@@ -115,7 +115,57 @@ function App() {
       link: "https://ieeexplore.ieee.org/document/10718371",
       description: "Research on implementing ML algorithms for customer segmentation to enhance recommendation systems.",
     },
-    
+  ];
+
+  const freelanceServices = [
+    {
+      title: "Python Automation Scripts",
+      description: "Custom automation solutions to streamline your business processes and save time.",
+      icon: <Robot className="w-8 h-8" />,
+      price: "Starting at $50",
+      deliveryTime: "2-5 days",
+      features: ["Custom scripting", "Process automation", "Data processing", "Task scheduling"]
+    },
+    {
+      title: "Desktop Application Development",
+      description: "Cross-platform desktop applications built with modern technologies.",
+      icon: <Monitor className="w-8 h-8" />,
+      price: "Starting at $200",
+      deliveryTime: "1-3 weeks",
+      features: ["GUI development", "Database integration", "Cross-platform", "User-friendly design"]
+    },
+    {
+      title: "Web Application Development",
+      description: "Full-stack web applications using React, Django, and modern frameworks.",
+      icon: <Code2 className="w-8 h-8" />,
+      price: "Starting at $300",
+      deliveryTime: "2-4 weeks",
+      features: ["Responsive design", "Database integration", "API development", "Modern UI/UX"]
+    },
+    {
+      title: "Data Analysis & Visualization",
+      description: "Transform your data into actionable insights with custom analysis tools.",
+      icon: <Database className="w-8 h-8" />,
+      price: "Starting at $100",
+      deliveryTime: "3-7 days",
+      features: ["Data cleaning", "Statistical analysis", "Interactive dashboards", "Custom reports"]
+    },
+    {
+      title: "IoT Solutions",
+      description: "Internet of Things projects with sensor integration and real-time monitoring.",
+      icon: <Cpu className="w-8 h-8" />,
+      price: "Starting at $150",
+      deliveryTime: "1-2 weeks",
+      features: ["Sensor integration", "Real-time monitoring", "Mobile app connectivity", "Cloud integration"]
+    },
+    {
+      title: "Machine Learning Models",
+      description: "Custom ML models for prediction, classification, and data analysis.",
+      icon: <Laptop className="w-8 h-8" />,
+      price: "Starting at $250",
+      deliveryTime: "1-3 weeks",
+      features: ["Model development", "Data preprocessing", "Performance optimization", "Deployment ready"]
+    }
   ];
 
   const skills = [
@@ -175,7 +225,7 @@ function App() {
       projects: [
         {
           title: 'Led-Blinking-using-fingers-with-cv2-and-pyfiramates',
-          description: 'This project uses computer vision to detect hand gestures and control LEDs connected to an Arduino board. It combines OpenCV, CVZone’s hand tracking, and Python for real-time gesture-based interaction.',
+          description: 'This project uses computer vision to detect hand gestures and control LEDs connected to an Arduino board. It combines OpenCV, CVZone's hand tracking, and Python for real-time gesture-based interaction.',
           image: 'https://raw.githubusercontent.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates/refs/heads/main/led_blinking.jpg',
           video: 'https://github.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates.git',
         }
@@ -202,7 +252,7 @@ function App() {
   ];
 
   return (
-    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-900' : 'bg-gray-100'} transition-colors duration-500`}>
+    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'} transition-colors duration-500`}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
           style={{ y: y1, opacity }}
@@ -214,7 +264,7 @@ function App() {
               className={`absolute rounded-full ${
                 isDarkTheme 
                   ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20' 
-                  : 'bg-gradient-to-r from-purple-500/10 to-pink-500/10'
+                  : 'bg-gradient-to-r from-purple-300/30 to-pink-300/30'
               }`}
               initial={{ scale: 0 }}
               animate={{
@@ -243,13 +293,13 @@ function App() {
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsDarkTheme(!isDarkTheme)}
         className={`fixed top-4 right-4 z-50 p-3 rounded-full ${
-          isDarkTheme ? 'bg-yellow-500' : 'bg-gray-800'
-        } transition-colors duration-300`}
+          isDarkTheme ? 'bg-yellow-500 text-gray-900' : 'bg-gray-800 text-white'
+        } transition-colors duration-300 shadow-lg`}
       >
         {isDarkTheme ? (
-          <Sun className="w-6 h-6 text-gray-900" />
+          <Sun className="w-6 h-6" />
         ) : (
-          <Moon className="w-6 h-6 text-white" />
+          <Moon className="w-6 h-6" />
         )}
       </motion.button>
 
@@ -303,7 +353,7 @@ function App() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className={`text-xl ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'} max-w-2xl mx-auto`}
+              className={`text-xl ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'} max-w-2xl mx-auto`}
             >
               Specializing in Python Development, Automation, and Modern Web Applications
             </motion.p>
@@ -314,8 +364,8 @@ function App() {
       <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 flex flex-col space-y-4">
         <motion.a
           href="https://github.com/varada-sandeep"
-          target="_blank"  // Add this line
-          rel="noopener noreferrer"  // Add this line for security reasons
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={{ scale: 1.2, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           className={`p-3 rounded-full ${
@@ -328,8 +378,8 @@ function App() {
         </motion.a>
         <motion.a
           href="https://www.linkedin.com/in/varada-sandeep-a72446260/"
-          target="_blank"  // Add this line
-          rel="noopener noreferrer"  // Add this line for security reasons
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={{ scale: 1.2, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           className={`p-3 rounded-full ${
@@ -342,8 +392,8 @@ function App() {
         </motion.a>
         <motion.a
           href="https://www.instagram.com/sandeepvarada4/?__pwa=1"
-          target="_blank"  // Add this line
-          rel="noopener noreferrer"  // Add this line for security reasons
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={{ scale: 1.2, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           className={`p-3 rounded-full ${
@@ -363,7 +413,7 @@ function App() {
         className={`py-20 ${
           isDarkTheme
             ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
-            : 'bg-gradient-to-r from-purple-100 to-pink-100'
+            : 'bg-gradient-to-r from-purple-100/80 to-pink-100/80'
         } backdrop-blur-lg`}
       >
         <div className="container mx-auto px-4">
@@ -372,7 +422,7 @@ function App() {
             className={`text-4xl font-bold text-center mb-16 ${
               isDarkTheme
                 ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-600 to-pink-600'
+                : 'bg-gradient-to-r from-purple-700 to-pink-700'
             } bg-clip-text text-transparent`}
           >
             Publications
@@ -385,9 +435,9 @@ function App() {
                 whileHover={{ scale: 1.02 }}
                 className={`${
                   isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30'
-                    : 'bg-white'
-                } rounded-lg p-8 shadow-lg`}
+                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
+                    : 'bg-white border border-purple-200 shadow-lg'
+                } rounded-lg p-8`}
               >
                 <div className="flex items-start space-x-4">
                   <div className={`p-3 rounded-lg ${
@@ -413,7 +463,7 @@ function App() {
                         isDarkTheme
                           ? 'text-blue-400 hover:text-blue-300'
                           : 'text-purple-600 hover:text-purple-500'
-                      }`}
+                      } transition-colors`}
                     >
                       <span className="mr-2">Read Paper</span>
                       <ExternalLink className="w-4 h-4" />
@@ -440,7 +490,7 @@ function App() {
             className={`text-4xl font-bold text-center mb-16 ${
               isDarkTheme
                 ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-600 to-pink-600'
+                : 'bg-gradient-to-r from-purple-700 to-pink-700'
             } bg-clip-text text-transparent`}
           >
             My Skills
@@ -453,19 +503,25 @@ function App() {
                 whileHover={{ scale: 1.05 }}
                 className={`group relative ${
                   isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/50'
-                    : 'bg-gradient-to-br from-purple-100 to-pink-100'
+                    ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/50 border border-blue-500/20'
+                    : 'bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 shadow-lg'
                 } backdrop-blur-sm rounded-lg p-6 cursor-pointer
-                          transform transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20`}
+                          transform transition-all duration-300 hover:shadow-2xl ${
+                            isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
+                          }`}
                 onClick={() => setSelectedSkill(skill)}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className={`absolute inset-0 ${
+                  isDarkTheme 
+                    ? 'bg-gradient-to-r from-blue-500/10 to-purple-500/10' 
+                    : 'bg-gradient-to-r from-purple-500/5 to-pink-500/5'
+                } rounded-lg opacity-0 group-hover:opacity-100 transition-opacity`} />
                 <div className="relative">
                   <div className="flex items-center mb-4">
                     <div className={`${
                       isDarkTheme
-                        ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20'
-                        : 'bg-gradient-to-r from-purple-200 to-pink-200'
+                        ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400'
+                        : 'bg-gradient-to-r from-purple-200 to-pink-200 text-purple-600'
                     } p-3 rounded-lg mr-4`}>
                       {skill.icon}
                     </div>
@@ -490,7 +546,7 @@ function App() {
         className={`py-20 ${
           isDarkTheme
             ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
-            : 'bg-gradient-to-r from-purple-100 to-pink-100'
+            : 'bg-gradient-to-r from-purple-100/80 to-pink-100/80'
         } backdrop-blur-lg`}
       >
         <div className="container mx-auto px-4">
@@ -499,7 +555,7 @@ function App() {
             className={`text-4xl font-bold text-center mb-16 ${
               isDarkTheme
                 ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-600 to-pink-600'
+                : 'bg-gradient-to-r from-purple-700 to-pink-700'
             } bg-clip-text text-transparent`}
           >
             Services
@@ -512,15 +568,17 @@ function App() {
                 whileHover={{ scale: 1.05 }}
                 className={`${
                   isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30'
-                    : 'bg-gradient-to-br from-purple-50 to-pink-50'
+                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
+                    : 'bg-white border border-purple-200 shadow-lg'
                 } rounded-lg p-8 text-center
-                          transform transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20`}
+                          transform transition-all duration-300 hover:shadow-2xl ${
+                            isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
+                          }`}
               >
                 <div className={`${
                   isDarkTheme
-                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20'
-                    : 'bg-gradient-to-r from-purple-200 to-pink-200'
+                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400'
+                    : 'bg-gradient-to-r from-purple-200 to-pink-200 text-purple-600'
                 } p-4 rounded-full inline-block mb-6`}>
                   {service.icon}
                 </div>
@@ -545,10 +603,176 @@ function App() {
         <div className="container mx-auto px-4">
           <motion.h2
             variants={slideFromLeft}
+            className={`text-4xl font-bold text-center mb-8 ${
+              isDarkTheme
+                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
+                : 'bg-gradient-to-r from-purple-700 to-pink-700'
+            } bg-clip-text text-transparent`}
+          >
+            Freelance Services
+          </motion.h2>
+          <motion.p
+            variants={fadeInUp}
+            className={`text-center text-lg mb-16 max-w-3xl mx-auto ${
+              isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+            }`}
+          >
+            I offer professional freelance services to help bring your ideas to life. 
+            From automation scripts to full-scale applications, I deliver quality solutions tailored to your needs.
+          </motion.p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {freelanceServices.map((service, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className={`${
+                  isDarkTheme
+                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
+                    : 'bg-white border border-purple-200 shadow-lg'
+                } rounded-lg p-6 transform transition-all duration-300 hover:shadow-2xl ${
+                  isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
+                }`}
+              >
+                <div className="flex items-center mb-4">
+                  <div className={`${
+                    isDarkTheme
+                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400'
+                      : 'bg-gradient-to-r from-purple-200 to-pink-200 text-purple-600'
+                  } p-3 rounded-lg mr-4`}>
+                    {service.icon}
+                  </div>
+                  <div>
+                    <h3 className={`text-lg font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
+                      {service.title}
+                    </h3>
+                    <p className={`text-sm ${
+                      isDarkTheme 
+                        ? 'text-blue-400' 
+                        : 'text-purple-600'
+                    } font-medium`}>
+                      {service.price}
+                    </p>
+                  </div>
+                </div>
+                
+                <p className={`mb-4 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {service.description}
+                </p>
+                
+                <div className="flex items-center mb-4 text-sm">
+                  <Clock className={`w-4 h-4 mr-2 ${
+                    isDarkTheme ? 'text-gray-400' : 'text-gray-500'
+                  }`} />
+                  <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
+                    {service.deliveryTime}
+                  </span>
+                </div>
+                
+                <div className="space-y-2">
+                  {service.features.map((feature, featureIndex) => (
+                    <div key={featureIndex} className="flex items-center text-sm">
+                      <Star className={`w-3 h-3 mr-2 ${
+                        isDarkTheme ? 'text-yellow-400' : 'text-yellow-500'
+                      }`} />
+                      <span className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
+                        {feature}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-full mt-6 py-3 px-4 rounded-lg ${
+                    isDarkTheme
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
+                      : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
+                  } text-white font-medium transform transition-all duration-300`}
+                  onClick={() => {
+                    const subject = encodeURIComponent(`Inquiry about ${service.title}`);
+                    const body = encodeURIComponent(`Hi Varada,\n\nI'm interested in your ${service.title} service. Could you please provide more details?\n\nThanks!`);
+                    window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`);
+                  }}
+                >
+                  Get Quote
+                </motion.button>
+              </motion.div>
+            ))}
+          </div>
+          
+          <motion.div
+            variants={fadeInUp}
+            className={`mt-16 text-center p-8 ${
+              isDarkTheme
+                ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/20'
+                : 'bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200'
+            } rounded-lg`}
+          >
+            <Briefcase className={`w-12 h-12 mx-auto mb-4 ${
+              isDarkTheme ? 'text-blue-400' : 'text-purple-600'
+            }`} />
+            <h3 className={`text-2xl font-bold mb-4 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
+              Ready to Start Your Project?
+            </h3>
+            <p className={`mb-6 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
+              Let's discuss your requirements and bring your ideas to life with custom solutions.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-lg ${
+                  isDarkTheme
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
+                    : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
+                } text-white font-medium transform transition-all duration-300`}
+                onClick={() => {
+                  const subject = encodeURIComponent('Project Inquiry');
+                  const body = encodeURIComponent('Hi Varada,\n\nI have a project in mind and would like to discuss the details with you.\n\nThanks!');
+                  window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`);
+                }}
+              >
+                <Mail className="w-5 h-5 inline mr-2" />
+                Email Me
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-lg border-2 ${
+                  isDarkTheme
+                    ? 'border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white'
+                    : 'border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white'
+                } font-medium transform transition-all duration-300`}
+                onClick={() => window.open('https://www.linkedin.com/in/varada-sandeep-a72446260/', '_blank')}
+              >
+                <Linkedin className="w-5 h-5 inline mr-2" />
+                LinkedIn
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className={`py-20 ${
+          isDarkTheme
+            ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
+            : 'bg-gradient-to-r from-purple-100/80 to-pink-100/80'
+        } backdrop-blur-lg`}
+      >
+        <div className="container mx-auto px-4">
+          <motion.h2
+            variants={slideFromLeft}
             className={`text-4xl font-bold text-center mb-16 ${
               isDarkTheme
                 ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-600 to-pink-600'
+                : 'bg-gradient-to-r from-purple-700 to-pink-700'
             } bg-clip-text text-transparent`}
           >
             Get in Touch
@@ -562,8 +786,8 @@ function App() {
                 variants={slideFromLeft}
                 className={`${
                   isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30'
-                    : 'bg-gradient-to-br from-purple-50 to-pink-50'
+                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
+                    : 'bg-white border border-purple-200 shadow-lg'
                 } rounded-lg p-8`}
               >
                 <h3 className={`text-2xl font-semibold mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
@@ -571,19 +795,19 @@ function App() {
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center">
-                    <Mail className="w-6 h-6 mr-4 text-blue-400" />
+                    <Mail className={`w-6 h-6 mr-4 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
                     <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
                       sandeepvarada4@gmail.com
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <Phone className="w-6 h-6 mr-4 text-blue-400" />
+                    <Phone className={`w-6 h-6 mr-4 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
                     <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
                       +91 93911 32531
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <MapPin className="w-6 h-6 mr-4 text-blue-400" />
+                    <MapPin className={`w-6 h-6 mr-4 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
                     <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
                       Chennai
                     </p>
@@ -605,17 +829,16 @@ function App() {
                     email,
                     message,
                   }, {
-                    headers: { 'Content-Type': 'application/json' }  // Ensure JSON format
+                    headers: { 'Content-Type': 'application/json' }
                   })
                     .then(response => {
-                      alert(response.data.message); // Show success message
+                      alert(response.data.message);
                     })
                     .catch(error => {
-                      alert('Failed to send email. Please try again later.'); // Show error message
+                      alert('Failed to send email. Please try again later.');
                       console.error('Error sending email:', error);
                     });
-                
-                  }}
+                }}
               >
                 <div>
                   <input
@@ -624,8 +847,8 @@ function App() {
                     placeholder="Your Name"
                     className={`w-full px-4 py-3 rounded-lg ${
                       isDarkTheme
-                        ? 'bg-blue-900/20 border-blue-500/30'
-                        : 'bg-white border-purple-200'
+                        ? 'bg-blue-900/20 border-blue-500/30 text-white placeholder-gray-400'
+                        : 'bg-white border-purple-200 text-gray-900 placeholder-gray-500'
                     } border focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all`}
                   />
                 </div>
@@ -636,8 +859,8 @@ function App() {
                     placeholder="Your Email"
                     className={`w-full px-4 py-3 rounded-lg ${
                       isDarkTheme
-                        ? 'bg-blue-900/20 border-blue-500/30'
-                        : 'bg-white border-purple-200'
+                        ? 'bg-blue-900/20 border-blue-500/30 text-white placeholder-gray-400'
+                        : 'bg-white border-purple-200 text-gray-900 placeholder-gray-500'
                     } border focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all`}
                   />
                 </div>
@@ -648,8 +871,8 @@ function App() {
                     rows={4}
                     className={`w-full px-4 py-3 rounded-lg ${
                       isDarkTheme
-                        ? 'bg-blue-900/20 border-blue-500/30'
-                        : 'bg-white border-purple-200'
+                        ? 'bg-blue-900/20 border-blue-500/30 text-white placeholder-gray-400'
+                        : 'bg-white border-purple-200 text-gray-900 placeholder-gray-500'
                     } border focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all`}
                   ></textarea>
                 </div>
@@ -685,8 +908,8 @@ function App() {
               exit={{ scale: 0.9, opacity: 0 }}
               className={`${
                 isDarkTheme
-                  ? 'bg-gradient-to-br from-blue-900/90 to-purple-900/90'
-                  : 'bg-white'
+                  ? 'bg-gradient-to-br from-blue-900/90 to-purple-900/90 border border-blue-500/20'
+                  : 'bg-white border border-purple-200'
               } rounded-lg p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto`}
               onClick={e => e.stopPropagation()}
             >
@@ -714,8 +937,8 @@ function App() {
                       transition={{ delay: index * 0.1 }}
                       className={`${
                         isDarkTheme
-                          ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/50'
-                          : 'bg-gradient-to-br from-purple-50 to-pink-50'
+                          ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/50 border border-blue-500/20'
+                          : 'bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200'
                       } rounded-lg overflow-hidden`}
                     >
                       <img
@@ -735,7 +958,9 @@ function App() {
                             href={project.video}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center text-blue-400 hover:text-blue-300 mt-4"
+                            className={`inline-flex items-center mt-4 ${
+                              isDarkTheme ? 'text-blue-400 hover:text-blue-300' : 'text-purple-600 hover:text-purple-500'
+                            } transition-colors`}
                           >
                             <ExternalLink className="w-4 h-4 mr-2" />
                             Project Link/Project Video
@@ -758,7 +983,7 @@ function App() {
       <motion.div
         className={`fixed bottom-4 right-4 w-12 h-12 rounded-full ${
           isDarkTheme ? 'bg-blue-500' : 'bg-purple-600'
-        } flex items-center justify-center text-white text-sm font-bold`}
+        } flex items-center justify-center text-white text-sm font-bold shadow-lg`}
         style={{
           scaleY: scrollYProgress
         }}
