@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen, Briefcase, Clock, Users, Star } from 'lucide-react';
+import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen, Briefcase, Clock, Users, Star, Calendar, CheckCircle } from 'lucide-react';
 import axios from 'axios';
 
 function App() {
@@ -117,54 +117,72 @@ function App() {
     },
   ];
 
-  const freelanceServices = [
+  const freelanceProjects = [
     {
-      title: "Python Automation Scripts",
-      description: "Custom automation solutions to streamline your business processes and save time.",
-      icon: <Robot className="w-8 h-8" />,
-      price: "Starting at $50",
-      deliveryTime: "2-5 days",
-      features: ["Custom scripting", "Process automation", "Data processing", "Task scheduling"]
+      title: "E-commerce Inventory Management System",
+      description: "Built a comprehensive desktop application for a local retail business to manage their inventory, track sales, and generate reports. Features include barcode scanning, low stock alerts, and automated reordering.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      technologies: ["Python", "Tkinter", "SQLite", "Pandas"],
+      duration: "3 weeks",
+      client: "Local Retail Store",
+      status: "Completed",
+      year: "2024",
+      features: ["Real-time inventory tracking", "Sales analytics", "Automated reports", "Barcode integration"]
     },
     {
-      title: "Desktop Application Development",
-      description: "Cross-platform desktop applications built with modern technologies.",
-      icon: <Monitor className="w-8 h-8" />,
-      price: "Starting at $200",
-      deliveryTime: "1-3 weeks",
-      features: ["GUI development", "Database integration", "Cross-platform", "User-friendly design"]
+      title: "Social Media Analytics Dashboard",
+      description: "Developed a web-based analytics dashboard for a marketing agency to track social media performance across multiple platforms. Includes data visualization, trend analysis, and automated reporting.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      technologies: ["React", "Django", "PostgreSQL", "Chart.js"],
+      duration: "4 weeks",
+      client: "Digital Marketing Agency",
+      status: "Completed",
+      year: "2024",
+      features: ["Multi-platform integration", "Real-time analytics", "Custom dashboards", "Automated reports"]
     },
     {
-      title: "Web Application Development",
-      description: "Full-stack web applications using React, Django, and modern frameworks.",
-      icon: <Code2 className="w-8 h-8" />,
-      price: "Starting at $300",
-      deliveryTime: "2-4 weeks",
-      features: ["Responsive design", "Database integration", "API development", "Modern UI/UX"]
+      title: "IoT Home Automation System",
+      description: "Created a smart home automation system using Arduino and Raspberry Pi. Includes mobile app control, voice commands, and energy monitoring for lights, fans, and appliances.",
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      technologies: ["Arduino", "Raspberry Pi", "Python", "React Native"],
+      duration: "5 weeks",
+      client: "Private Homeowner",
+      status: "Completed",
+      year: "2023",
+      features: ["Voice control", "Mobile app", "Energy monitoring", "Remote access"]
     },
     {
-      title: "Data Analysis & Visualization",
-      description: "Transform your data into actionable insights with custom analysis tools.",
-      icon: <Database className="w-8 h-8" />,
-      price: "Starting at $100",
-      deliveryTime: "3-7 days",
-      features: ["Data cleaning", "Statistical analysis", "Interactive dashboards", "Custom reports"]
+      title: "Data Processing Automation Suite",
+      description: "Automated data processing workflow for a research institute. The system processes large datasets, performs statistical analysis, and generates visualizations automatically, reducing manual work by 80%.",
+      image: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      technologies: ["Python", "Pandas", "NumPy", "Matplotlib"],
+      duration: "2 weeks",
+      client: "Research Institute",
+      status: "Completed",
+      year: "2024",
+      features: ["Automated processing", "Statistical analysis", "Data visualization", "Batch processing"]
     },
     {
-      title: "IoT Solutions",
-      description: "Internet of Things projects with sensor integration and real-time monitoring.",
-      icon: <Cpu className="w-8 h-8" />,
-      price: "Starting at $150",
-      deliveryTime: "1-2 weeks",
-      features: ["Sensor integration", "Real-time monitoring", "Mobile app connectivity", "Cloud integration"]
+      title: "Customer Support Chatbot",
+      description: "Developed an AI-powered chatbot for an e-commerce website to handle customer inquiries, order tracking, and basic support. Integrated with existing CRM system and reduced support tickets by 60%.",
+      image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      technologies: ["Python", "NLP", "Flask", "JavaScript"],
+      duration: "3 weeks",
+      client: "E-commerce Company",
+      status: "Completed",
+      year: "2023",
+      features: ["Natural language processing", "CRM integration", "Order tracking", "24/7 availability"]
     },
     {
-      title: "Machine Learning Models",
-      description: "Custom ML models for prediction, classification, and data analysis.",
-      icon: <Laptop className="w-8 h-8" />,
-      price: "Starting at $250",
-      deliveryTime: "1-3 weeks",
-      features: ["Model development", "Data preprocessing", "Performance optimization", "Deployment ready"]
+      title: "Financial Portfolio Tracker",
+      description: "Built a personal finance application to track investments, analyze portfolio performance, and provide insights. Features real-time stock data integration and risk assessment tools.",
+      image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      technologies: ["Python", "Django", "React", "Alpha Vantage API"],
+      duration: "4 weeks",
+      client: "Financial Advisor",
+      status: "Completed",
+      year: "2024",
+      features: ["Real-time data", "Portfolio analysis", "Risk assessment", "Performance tracking"]
     }
   ];
 
@@ -543,6 +561,178 @@ function App() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
+        className="py-20"
+      >
+        <div className="container mx-auto px-4">
+          <motion.h2
+            variants={slideFromLeft}
+            className={`text-4xl font-bold text-center mb-8 ${
+              isDarkTheme
+                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
+                : 'bg-gradient-to-r from-purple-700 to-pink-700'
+            } bg-clip-text text-transparent`}
+          >
+            Freelance Projects
+          </motion.h2>
+          <motion.p
+            variants={fadeInUp}
+            className={`text-center text-lg mb-16 max-w-3xl mx-auto ${
+              isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+            }`}
+          >
+            Here are some of the successful projects I've completed for clients across various industries. 
+            Each project showcases different aspects of my technical expertise and problem-solving abilities.
+          </motion.p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {freelanceProjects.map((project, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className={`${
+                  isDarkTheme
+                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
+                    : 'bg-white border border-purple-200 shadow-lg'
+                } rounded-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl ${
+                  isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
+                }`}
+              >
+                <div className="relative">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium ${
+                    isDarkTheme
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                      : 'bg-green-100 text-green-700 border border-green-200'
+                  }`}>
+                    <CheckCircle className="w-3 h-3 inline mr-1" />
+                    {project.status}
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className={`text-xl font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
+                      {project.title}
+                    </h3>
+                    <span className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {project.year}
+                    </span>
+                  </div>
+                  
+                  <p className={`mb-4 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {project.description}
+                  </p>
+                  
+                  <div className="flex items-center mb-4 text-sm">
+                    <Users className={`w-4 h-4 mr-2 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
+                    <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
+                      {project.client}
+                    </span>
+                    <Clock className={`w-4 h-4 ml-4 mr-2 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
+                    <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
+                      {project.duration}
+                    </span>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <h4 className={`text-sm font-medium mb-2 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Key Features:
+                    </h4>
+                    <div className="grid grid-cols-2 gap-1">
+                      {project.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-center text-xs">
+                          <CheckCircle className={`w-3 h-3 mr-2 ${
+                            isDarkTheme ? 'text-green-400' : 'text-green-500'
+                          }`} />
+                          <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
+                            {feature}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, techIndex) => (
+                      <span
+                        key={techIndex}
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          isDarkTheme
+                            ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                            : 'bg-purple-100 text-purple-700 border border-purple-200'
+                        }`}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          <motion.div
+            variants={fadeInUp}
+            className={`mt-16 text-center p-8 ${
+              isDarkTheme
+                ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/20'
+                : 'bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200'
+            } rounded-lg`}
+          >
+            <Briefcase className={`w-12 h-12 mx-auto mb-4 ${
+              isDarkTheme ? 'text-blue-400' : 'text-purple-600'
+            }`} />
+            <h3 className={`text-2xl font-bold mb-4 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
+              Interested in Working Together?
+            </h3>
+            <p className={`mb-6 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
+              I'm always open to discussing new projects and opportunities. Let's create something amazing together!
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-lg ${
+                  isDarkTheme
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
+                    : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
+                } text-white font-medium transform transition-all duration-300`}
+                onClick={() => {
+                  const subject = encodeURIComponent('Project Inquiry');
+                  const body = encodeURIComponent('Hi Varada,\n\nI have a project in mind and would like to discuss the details with you.\n\nThanks!');
+                  window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`);
+                }}
+              >
+                <Mail className="w-5 h-5 inline mr-2" />
+                Email Me
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-lg border-2 ${
+                  isDarkTheme
+                    ? 'border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white'
+                    : 'border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white'
+                } font-medium transform transition-all duration-300`}
+                onClick={() => window.open('https://www.linkedin.com/in/varada-sandeep-a72446260/', '_blank')}
+              >
+                <Linkedin className="w-5 h-5 inline mr-2" />
+                LinkedIn
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
         className={`py-20 ${
           isDarkTheme
             ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
@@ -591,168 +781,6 @@ function App() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="py-20"
-      >
-        <div className="container mx-auto px-4">
-          <motion.h2
-            variants={slideFromLeft}
-            className={`text-4xl font-bold text-center mb-8 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-700 to-pink-700'
-            } bg-clip-text text-transparent`}
-          >
-            Freelance Services
-          </motion.h2>
-          <motion.p
-            variants={fadeInUp}
-            className={`text-center text-lg mb-16 max-w-3xl mx-auto ${
-              isDarkTheme ? 'text-gray-300' : 'text-gray-600'
-            }`}
-          >
-            I offer professional freelance services to help bring your ideas to life. 
-            From automation scripts to full-scale applications, I deliver quality solutions tailored to your needs.
-          </motion.p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {freelanceServices.map((service, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className={`${
-                  isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
-                    : 'bg-white border border-purple-200 shadow-lg'
-                } rounded-lg p-6 transform transition-all duration-300 hover:shadow-2xl ${
-                  isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
-                }`}
-              >
-                <div className="flex items-center mb-4">
-                  <div className={`${
-                    isDarkTheme
-                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400'
-                      : 'bg-gradient-to-r from-purple-200 to-pink-200 text-purple-600'
-                  } p-3 rounded-lg mr-4`}>
-                    {service.icon}
-                  </div>
-                  <div>
-                    <h3 className={`text-lg font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                      {service.title}
-                    </h3>
-                    <p className={`text-sm ${
-                      isDarkTheme 
-                        ? 'text-blue-400' 
-                        : 'text-purple-600'
-                    } font-medium`}>
-                      {service.price}
-                    </p>
-                  </div>
-                </div>
-                
-                <p className={`mb-4 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
-                  {service.description}
-                </p>
-                
-                <div className="flex items-center mb-4 text-sm">
-                  <Clock className={`w-4 h-4 mr-2 ${
-                    isDarkTheme ? 'text-gray-400' : 'text-gray-500'
-                  }`} />
-                  <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
-                    {service.deliveryTime}
-                  </span>
-                </div>
-                
-                <div className="space-y-2">
-                  {service.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-center text-sm">
-                      <Star className={`w-3 h-3 mr-2 ${
-                        isDarkTheme ? 'text-yellow-400' : 'text-yellow-500'
-                      }`} />
-                      <span className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`w-full mt-6 py-3 px-4 rounded-lg ${
-                    isDarkTheme
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
-                      : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
-                  } text-white font-medium transform transition-all duration-300`}
-                  onClick={() => {
-                    const subject = encodeURIComponent(`Inquiry about ${service.title}`);
-                    const body = encodeURIComponent(`Hi Varada,\n\nI'm interested in your ${service.title} service. Could you please provide more details?\n\nThanks!`);
-                    window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`);
-                  }}
-                >
-                  Get Quote
-                </motion.button>
-              </motion.div>
-            ))}
-          </div>
-          
-          <motion.div
-            variants={fadeInUp}
-            className={`mt-16 text-center p-8 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/20'
-                : 'bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200'
-            } rounded-lg`}
-          >
-            <Briefcase className={`w-12 h-12 mx-auto mb-4 ${
-              isDarkTheme ? 'text-blue-400' : 'text-purple-600'
-            }`} />
-            <h3 className={`text-2xl font-bold mb-4 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-              Ready to Start Your Project?
-            </h3>
-            <p className={`mb-6 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
-              Let's discuss your requirements and bring your ideas to life with custom solutions.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-lg ${
-                  isDarkTheme
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
-                    : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
-                } text-white font-medium transform transition-all duration-300`}
-                onClick={() => {
-                  const subject = encodeURIComponent('Project Inquiry');
-                  const body = encodeURIComponent('Hi Varada,\n\nI have a project in mind and would like to discuss the details with you.\n\nThanks!');
-                  window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`);
-                }}
-              >
-                <Mail className="w-5 h-5 inline mr-2" />
-                Email Me
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-lg border-2 ${
-                  isDarkTheme
-                    ? 'border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white'
-                    : 'border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white'
-                } font-medium transform transition-all duration-300`}
-                onClick={() => window.open('https://www.linkedin.com/in/varada-sandeep-a72446260/', '_blank')}
-              >
-                <Linkedin className="w-5 h-5 inline mr-2" />
-                LinkedIn
-              </motion.button>
-            </div>
-          </motion.div>
         </div>
       </motion.div>
 
