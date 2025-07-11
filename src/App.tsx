@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { 
-  Menu, X, Download, Mail, Phone, MapPin, Github, Linkedin, Instagram, 
-  ExternalLink, Code2, Database, Cpu, Monitor, Robot, Laptop, 
-  Award, Calendar, Users, Star, CheckCircle, ArrowRight, Send,
-  BookOpen, Briefcase, Globe, Zap, Target, TrendingUp
-} from 'lucide-react';
+import { Menu, X, Download, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, Code2, Database, Cpu, Monitor, Notebook as Robot, Laptop, Award, Calendar, Users, Star, CheckCircle, ArrowRight, Send, BookOpen, Briefcase, Globe, Zap, Target, TrendingUp } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
