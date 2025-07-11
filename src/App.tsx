@@ -404,7 +404,7 @@ Best regards,`;
               transition={{ delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed"
             >
-              Python Developer & Automation Specialist
+              Python , Web & Automation Specialist
             </motion.p>
 
             <motion.p
@@ -455,11 +455,11 @@ Best regards,`;
                 <div className="text-sm text-gray-600">Projects</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">2+</div>
+                <div className="text-2xl font-bold text-purple-600">2</div>
                 <div className="text-sm text-gray-600">Years Exp</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">100%</div>
+                <div className="text-2xl font-bold text-green-600">95%</div>
                 <div className="text-sm text-gray-600">Success Rate</div>
               </div>
             </motion.div>
@@ -474,7 +474,6 @@ Best regards,`;
               {[
                 { icon: <Github className="w-6 h-6" />, url: 'https://github.com/varada-sandeep', label: 'GitHub' },
                 { icon: <Linkedin className="w-6 h-6" />, url: 'https://www.linkedin.com/in/varada-sandeep-a72446260/', label: 'LinkedIn' },
-                { icon: <Mail className="w-6 h-6" />, url: 'mailto:sandeepvarada4@gmail.com', label: 'Email' }
               ].map((social, index) => (
                 <motion.a
                   key={index}
