@@ -6,7 +6,8 @@ import { Menu, X, Download, Mail, Phone, MapPin, Github, Linkedin, Instagram, Ex
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [showTestimonials, setShowTestimonials] = useState(true); // Toggle for testimonials
+  // Hidden testimonial toggle - controlled in code only
+  const [showTestimonials] = useState(false); // Set to true/false to show/hide testimonials
   const { scrollY } = useScroll();
   const headerOpacity = useTransform(scrollY, [0, 100], [1, 0.95]);
 
@@ -39,6 +40,52 @@ function App() {
     setIsMenuOpen(false);
   };
 
+  const handleHireMe = () => {
+    const subject = encodeURIComponent('Job Opportunity - Python Developer Position');
+    const body = encodeURIComponent(`Hello Varada,
+
+I am interested in discussing a potential job opportunity with you. I came across your portfolio and was impressed by your skills and experience.
+
+Could we schedule a time to discuss this further?
+
+Best regards,`);
+    
+    window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`, '_blank');
+  };
+
+  const handleLetsConnect = () => {
+    const subject = encodeURIComponent('Let\'s Connect - Networking Opportunity');
+    const body = encodeURIComponent(`Hello Varada,
+
+I would like to connect with you professionally. I found your portfolio impressive and would love to discuss potential opportunities or collaborations.
+
+Looking forward to hearing from you.
+
+Best regards,`);
+    
+    window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`, '_blank');
+  };
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const subject = formData.get('subject') as string;
+    const message = formData.get('message') as string;
+    
+    const emailSubject = encodeURIComponent(subject || 'Contact from Portfolio Website');
+    const emailBody = encodeURIComponent(`Name: ${name}
+Email: ${email}
+
+Message:
+${message}`);
+    
+    window.open(`mailto:sandeepvarada4@gmail.com?subject=${emailSubject}&body=${emailBody}`, '_blank');
+  };
+
   const skills = [
     { name: 'Python', icon: <Code2 className="w-6 h-6" />, category: 'Programming' },
     { name: 'JavaScript/React', icon: <Monitor className="w-6 h-6" />, category: 'Frontend' },
@@ -57,10 +104,11 @@ function App() {
       image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
       technologies: ['Python', 'Tkinter', 'SQLite', 'Pandas'],
       features: ['Real-time inventory tracking', 'Automated low stock alerts', 'Sales analytics dashboard', 'Barcode integration'],
-      liveDemo: '#',
-      github: '#',
+      type: 'Personal Project',
       category: 'Desktop Application',
-      impact: 'Reduced inventory management time by 60%'
+      impact: 'Reduced inventory management time by 60%',
+      hasLiveDemo: false,
+      hasCode: true
     },
     {
       title: 'Social Media Analytics Dashboard',
@@ -68,10 +116,11 @@ function App() {
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
       technologies: ['React', 'Django', 'PostgreSQL', 'Chart.js'],
       features: ['Multi-platform integration', 'Real-time analytics', 'Custom dashboards', 'Automated reports'],
-      liveDemo: '#',
-      github: '#',
+      type: 'Freelance Project',
       category: 'Web Application',
-      impact: 'Improved marketing ROI by 40%'
+      impact: 'Improved marketing ROI by 40%',
+      hasLiveDemo: false,
+      hasCode: false
     },
     {
       title: 'IoT Home Automation System',
@@ -79,10 +128,11 @@ function App() {
       image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
       technologies: ['Arduino', 'Raspberry Pi', 'Python', 'React Native'],
       features: ['Voice control integration', 'Mobile app control', 'Energy monitoring', 'Remote access'],
-      liveDemo: '#',
-      github: '#',
+      type: 'Academic Project',
       category: 'IoT Solution',
-      impact: 'Reduced energy consumption by 25%'
+      impact: 'Reduced energy consumption by 25%',
+      hasLiveDemo: false,
+      hasCode: true
     },
     {
       title: 'Machine Learning Customer Segmentation',
@@ -90,10 +140,35 @@ function App() {
       image: 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
       technologies: ['Python', 'Scikit-learn', 'Pandas', 'Matplotlib'],
       features: ['Advanced clustering algorithms', 'Data visualization', 'Performance metrics', 'Scalable architecture'],
-      liveDemo: '#',
-      github: '#',
+      type: 'Research Project',
       category: 'Machine Learning',
-      impact: 'Increased recommendation accuracy by 35%'
+      impact: 'Increased recommendation accuracy by 35%',
+      hasLiveDemo: false,
+      hasCode: true
+    },
+    {
+      title: 'Data Processing Automation Suite',
+      description: 'Automated data processing pipeline for research institute handling large datasets with custom reporting.',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      technologies: ['Python', 'Pandas', 'NumPy', 'Matplotlib'],
+      features: ['Automated data cleaning', 'Custom report generation', 'Error handling', 'Scheduled processing'],
+      type: 'Freelance Project',
+      category: 'Data Processing',
+      impact: 'Reduced processing time by 80%',
+      hasLiveDemo: false,
+      hasCode: false
+    },
+    {
+      title: 'Customer Support Chatbot',
+      description: 'AI-powered chatbot for e-commerce platform with natural language processing and automated responses.',
+      image: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      technologies: ['Python', 'NLTK', 'Flask', 'SQLite'],
+      features: ['Natural language processing', 'Automated responses', 'Learning capabilities', 'Integration ready'],
+      type: 'Freelance Project',
+      category: 'AI/Chatbot',
+      impact: 'Reduced support tickets by 45%',
+      hasLiveDemo: false,
+      hasCode: false
     }
   ];
 
@@ -209,15 +284,17 @@ function App() {
                   {item}
                 </button>
               ))}
-              <motion.button
+              <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => window.open('/resume.pdf', '_blank')}
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300"
               >
                 <Download className="w-4 h-4 inline mr-2" />
                 Resume
-              </motion.button>
+              </motion.a>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -249,13 +326,15 @@ function App() {
                     {item}
                   </button>
                 ))}
-                <button
-                  onClick={() => window.open('/resume.pdf', '_blank')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-medium w-full"
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-medium w-full block text-center"
                 >
                   <Download className="w-4 h-4 inline mr-2" />
                   Download Resume
-                </button>
+                </a>
               </div>
             </motion.div>
           )}
@@ -326,7 +405,7 @@ function App() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => window.open('mailto:sandeepvarada4@gmail.com', '_blank')}
+                onClick={handleHireMe}
                 className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition-all duration-300"
               >
                 <Mail className="w-5 h-5 inline mr-2" />
@@ -484,7 +563,7 @@ function App() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => window.open('mailto:sandeepvarada4@gmail.com', '_blank')}
+                  onClick={handleLetsConnect}
                   className="bg-white text-blue-600 px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-300"
                 >
                   Let's Connect
@@ -576,6 +655,9 @@ function App() {
                   <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                     {project.category}
                   </div>
+                  <div className="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {project.type}
+                  </div>
                   <div className="absolute bottom-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                     {project.impact}
                   </div>
@@ -611,24 +693,31 @@ function App() {
                   </div>
                   
                   <div className="flex space-x-4">
-                    <motion.a
-                      href={project.liveDemo}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg text-center font-medium hover:shadow-lg transition-all duration-300"
-                    >
-                      <Globe className="w-4 h-4 inline mr-2" />
-                      Live Demo
-                    </motion.a>
-                    <motion.a
-                      href={project.github}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 border-2 border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-center font-medium hover:border-blue-600 hover:text-blue-600 transition-all duration-300"
-                    >
-                      <Github className="w-4 h-4 inline mr-2" />
-                      Code
-                    </motion.a>
+                    {project.hasLiveDemo && (
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg text-center font-medium hover:shadow-lg transition-all duration-300"
+                      >
+                        <Globe className="w-4 h-4 inline mr-2" />
+                        Live Demo
+                      </motion.button>
+                    )}
+                    {project.hasCode && (
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex-1 border-2 border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-center font-medium hover:border-blue-600 hover:text-blue-600 transition-all duration-300"
+                      >
+                        <Github className="w-4 h-4 inline mr-2" />
+                        View Code
+                      </motion.button>
+                    )}
+                    {!project.hasLiveDemo && !project.hasCode && (
+                      <div className="flex-1 bg-gray-100 text-gray-500 py-2 px-4 rounded-lg text-center font-medium">
+                        <span className="text-sm">Confidential Project</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -650,23 +739,6 @@ function App() {
               Experience & Achievements
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
-            
-            {/* Testimonial Toggle */}
-            <div className="flex justify-center mb-8">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowTestimonials(!showTestimonials)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                  showTestimonials 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                {showTestimonials ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                <span>{showTestimonials ? 'Hide' : 'Show'} Testimonials</span>
-              </motion.button>
-            </div>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -743,48 +815,45 @@ function App() {
                 </div>
               </div>
 
-              {/* Testimonials - Conditional Rendering */}
-              <AnimatePresence>
-                {showTestimonials && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <h3 className="text-2xl font-bold text-gray-900 mb-8">Client Testimonials</h3>
-                    <div className="space-y-6">
-                      {testimonials.map((testimonial, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200"
-                        >
-                          <div className="flex items-center mb-4">
-                            <img
-                              src={testimonial.image}
-                              alt={testimonial.name}
-                              className="w-12 h-12 rounded-full mr-4 border-2 border-gray-200"
-                            />
-                            <div>
-                              <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
-                              <p className="text-sm text-gray-600">{testimonial.role}</p>
-                            </div>
-                            <div className="ml-auto flex">
-                              {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                              ))}
-                            </div>
+              {/* Testimonials - Conditional Rendering based on showTestimonials */}
+              {showTestimonials && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-8">Client Testimonials</h3>
+                  <div className="space-y-6">
+                    {testimonials.map((testimonial, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200"
+                      >
+                        <div className="flex items-center mb-4">
+                          <img
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            className="w-12 h-12 rounded-full mr-4 border-2 border-gray-200"
+                          />
+                          <div>
+                            <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                            <p className="text-sm text-gray-600">{testimonial.role}</p>
                           </div>
-                          <p className="text-gray-700 italic">"{testimonial.content}"</p>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                          <div className="ml-auto flex">
+                            {[...Array(testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-gray-700 italic">"{testimonial.content}"</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
           </div>
         </div>
@@ -880,12 +949,14 @@ function App() {
             >
               <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Send a Message</h3>
-                <form className="space-y-6">
+                <form onSubmit={handleSendMessage} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
                       <input
                         type="text"
+                        name="name"
+                        required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                         placeholder="Your Name"
                       />
@@ -894,6 +965,8 @@ function App() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                       <input
                         type="email"
+                        name="email"
+                        required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                         placeholder="your@email.com"
                       />
@@ -903,6 +976,7 @@ function App() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
                     <input
                       type="text"
+                      name="subject"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                       placeholder="Job Opportunity / Collaboration"
                     />
@@ -910,7 +984,9 @@ function App() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                     <textarea
+                      name="message"
                       rows={5}
+                      required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                       placeholder="Tell me about the opportunity..."
                     ></textarea>
