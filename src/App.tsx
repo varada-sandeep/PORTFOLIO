@@ -6,6 +6,8 @@ import { Menu, X, Download, Mail, Phone, MapPin, Github, Linkedin, Instagram, Ex
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
   // Hidden testimonial toggle - controlled in code only
   const [showTestimonials] = useState(false); // Set to true/false to show/hide testimonials
   const { scrollY } = useScroll();
@@ -41,33 +43,44 @@ function App() {
   };
 
   const handleHireMe = () => {
-    const subject = encodeURIComponent('Job Opportunity - Python Developer Position');
-    const body = encodeURIComponent(`Hello Varada,
+    scrollToSection('contact');
+    // Pre-fill the form with hire me context
+    setTimeout(() => {
+      const subjectInput = document.querySelector('input[name="subject"]') as HTMLInputElement;
+      const messageTextarea = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
+      if (subjectInput) subjectInput.value = 'Job Opportunity - Python Developer Position';
+      if (messageTextarea) messageTextarea.value = `Hello Varada,
 
 I am interested in discussing a potential job opportunity with you. I came across your portfolio and was impressed by your skills and experience.
 
 Could we schedule a time to discuss this further?
 
-Best regards,`);
-    
-    window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`, '_blank');
+Best regards,`;
+    }, 500);
   };
 
   const handleLetsConnect = () => {
-    const subject = encodeURIComponent('Let\'s Connect - Networking Opportunity');
-    const body = encodeURIComponent(`Hello Varada,
+    scrollToSection('contact');
+    // Pre-fill the form with networking context
+    setTimeout(() => {
+      const subjectInput = document.querySelector('input[name="subject"]') as HTMLInputElement;
+      const messageTextarea = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
+      if (subjectInput) subjectInput.value = 'Let\'s Connect - Networking Opportunity';
+      if (messageTextarea) messageTextarea.value = `Hello Varada,
 
 I would like to connect with you professionally. I found your portfolio impressive and would love to discuss potential opportunities or collaborations.
 
 Looking forward to hearing from you.
 
-Best regards,`);
-    
-    window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`, '_blank');
+Best regards,`;
+    }, 500);
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage('');
+    
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
     
@@ -76,14 +89,31 @@ Best regards,`);
     const subject = formData.get('subject') as string;
     const message = formData.get('message') as string;
     
-    const emailSubject = encodeURIComponent(subject || 'Contact from Portfolio Website');
-    const emailBody = encodeURIComponent(`Name: ${name}
-Email: ${email}
+    try {
+      const response = await fetch('https://backend-2-anxj.onrender.com/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message: `Subject: ${subject}\n\nFrom: ${name} (${email})\n\nMessage:\n${message}`
+        }),
+      });
 
-Message:
-${message}`);
-    
-    window.open(`mailto:sandeepvarada4@gmail.com?subject=${emailSubject}&body=${emailBody}`, '_blank');
+      if (response.ok) {
+        setSubmitMessage('Message sent successfully! I\'ll get back to you soon.');
+        form.reset();
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setSubmitMessage('Failed to send message. Please try again or contact me directly at sandeepvarada4@gmail.com');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const skills = [
@@ -991,14 +1021,35 @@ ${message}`);
                       placeholder="Tell me about the opportunity..."
                     ></textarea>
                   </div>
+                  
+                  {submitMessage && (
+                    <div className={`p-4 rounded-lg ${
+                      submitMessage.includes('successfully') 
+                        ? 'bg-green-100 text-green-700 border border-green-200' 
+                        : 'bg-red-100 text-red-700 border border-red-200'
+                    }`}>
+                      {submitMessage}
+                    </div>
+                  )}
+                  
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-lg font-medium hover:shadow-lg transition-all duration-300"
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-lg font-medium hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Send className="w-5 h-5 inline mr-2" />
-                    Send Message
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 inline mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 inline mr-2" />
+                        Send Message
+                      </>
+                    )}
                   </motion.button>
                 </form>
               </div>
