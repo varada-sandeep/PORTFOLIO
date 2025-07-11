@@ -1,1028 +1,801 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Code2, Monitor, Notebook as Robot, Cpu, Database, Laptop, Mail, Phone, MapPin, Github, Linkedin, Instagram, ExternalLink, X, Sun, Moon, BookOpen, Briefcase, Clock, Users, Star, Calendar, CheckCircle } from 'lucide-react';
-import axios from 'axios';
+import { 
+  Menu, X, Download, Mail, Phone, MapPin, Github, Linkedin, Instagram, 
+  ExternalLink, Code2, Database, Cpu, Monitor, Robot, Laptop, 
+  Award, Calendar, Users, Star, CheckCircle, ArrowRight, Send,
+  BookOpen, Briefcase, Globe, Zap, Target, TrendingUp
+} from 'lucide-react';
 
 function App() {
-  const [selectedSkill, setSelectedSkill] = useState<null | {
-    icon: JSX.Element;
-    name: string;
-    description: string;
-    projects: {
-      title: string;
-      description: string;
-      image: string;
-      video?: string;
-    }[];
-  }>(null);
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const { scrollY, scrollYProgress } = useScroll();
-  const [ref] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const { scrollY } = useScroll();
+  const headerOpacity = useTransform(scrollY, [0, 100], [1, 0.95]);
+  const headerBlur = useTransform(scrollY, [0, 100], [0, 10]);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
-      });
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'skills', 'portfolio', 'experience', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2 }
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
+    setIsMenuOpen(false);
   };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.6 }
-    }
-  };
-
-  const slideFromLeft = {
-    hidden: { x: -100, opacity: 0 },
-    visible: { 
-      x: 0,
-      opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" }
-    }
-  };
-
-  const slideFromRight = {
-    hidden: { x: 100, opacity: 0 },
-    visible: { 
-      x: 0,
-      opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" }
-    }
-  };
-
-  const fadeInUp = {
-    hidden: { y: 60, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
-  };
-
-  const nameAnimation = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const letterAnimation = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
-
-  const publications = [
-    {
-      title: "Crafting Customer Segmentation Strategies for Advanced Recommendation System",
-      journal: "2024 Third International Conference on Electrical, Electronics, Information and Communication Technologies (ICEEICT)",
-      year: 2024,
-      link: "https://ieeexplore.ieee.org/document/10718371",
-      description: "Research on implementing ML algorithms for customer segmentation to enhance recommendation systems.",
-    },
-  ];
-
-  const freelanceProjects = [
-    {
-      title: "E-commerce Inventory Management System",
-      description: "Built a comprehensive desktop application for a local retail business to manage their inventory, track sales, and generate reports. Features include barcode scanning, low stock alerts, and automated reordering.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      technologies: ["Python", "Tkinter", "SQLite", "Pandas"],
-      duration: "3 weeks",
-      client: "Local Retail Store",
-      status: "Completed",
-      year: "2024",
-      features: ["Real-time inventory tracking", "Sales analytics", "Automated reports", "Barcode integration"]
-    },
-    {
-      title: "Social Media Analytics Dashboard",
-      description: "Developed a web-based analytics dashboard for a marketing agency to track social media performance across multiple platforms. Includes data visualization, trend analysis, and automated reporting.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      technologies: ["React", "Django", "PostgreSQL", "Chart.js"],
-      duration: "4 weeks",
-      client: "Digital Marketing Agency",
-      status: "Completed",
-      year: "2024",
-      features: ["Multi-platform integration", "Real-time analytics", "Custom dashboards", "Automated reports"]
-    },
-    {
-      title: "IoT Home Automation System",
-      description: "Created a smart home automation system using Arduino and Raspberry Pi. Includes mobile app control, voice commands, and energy monitoring for lights, fans, and appliances.",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      technologies: ["Arduino", "Raspberry Pi", "Python", "React Native"],
-      duration: "5 weeks",
-      client: "Private Homeowner",
-      status: "Completed",
-      year: "2023",
-      features: ["Voice control", "Mobile app", "Energy monitoring", "Remote access"]
-    },
-    {
-      title: "Data Processing Automation Suite",
-      description: "Automated data processing workflow for a research institute. The system processes large datasets, performs statistical analysis, and generates visualizations automatically, reducing manual work by 80%.",
-      image: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      technologies: ["Python", "Pandas", "NumPy", "Matplotlib"],
-      duration: "2 weeks",
-      client: "Research Institute",
-      status: "Completed",
-      year: "2024",
-      features: ["Automated processing", "Statistical analysis", "Data visualization", "Batch processing"]
-    },
-    {
-      title: "Customer Support Chatbot",
-      description: "Developed an AI-powered chatbot for an e-commerce website to handle customer inquiries, order tracking, and basic support. Integrated with existing CRM system and reduced support tickets by 60%.",
-      image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      technologies: ["Python", "NLP", "Flask", "JavaScript"],
-      duration: "3 weeks",
-      client: "E-commerce Company",
-      status: "Completed",
-      year: "2023",
-      features: ["Natural language processing", "CRM integration", "Order tracking", "24/7 availability"]
-    },
-    {
-      title: "Financial Portfolio Tracker",
-      description: "Built a personal finance application to track investments, analyze portfolio performance, and provide insights. Features real-time stock data integration and risk assessment tools.",
-      image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      technologies: ["Python", "Django", "React", "Alpha Vantage API"],
-      duration: "4 weeks",
-      client: "Financial Advisor",
-      status: "Completed",
-      year: "2024",
-      features: ["Real-time data", "Portfolio analysis", "Risk assessment", "Performance tracking"]
-    }
-  ];
 
   const skills = [
+    { name: 'Python', level: 95, icon: <Code2 className="w-6 h-6" /> },
+    { name: 'JavaScript/React', level: 88, icon: <Monitor className="w-6 h-6" /> },
+    { name: 'Django/Flask', level: 90, icon: <Database className="w-6 h-6" /> },
+    { name: 'Machine Learning', level: 82, icon: <Cpu className="w-6 h-6" /> },
+    { name: 'IoT Development', level: 85, icon: <Laptop className="w-6 h-6" /> },
+    { name: 'Process Automation', level: 92, icon: <Robot className="w-6 h-6" /> }
+  ];
+
+  const projects = [
     {
-      icon: <Code2 className="w-8 h-8" />,
-      name: 'Python',
-      description: 'Expert in Python development with extensive experience in automation and scripting.',
-      projects: [
-        {
-          title: 'Data Analysis Tool',
-          description: 'Advanced data processing and visualization tool built with Python.',
-          image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-          video: 'https://example.com/video1.mp4'
-        },
-        {
-          title: 'Task Automation Suite',
-          description: 'Enterprise-level automation framework for business processes.',
-          image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-          video: 'https://example.com/video2.mp4'
-        }
-      ]
+      title: 'E-commerce Inventory Management System',
+      description: 'Comprehensive desktop application for retail inventory management with real-time tracking, automated alerts, and detailed analytics.',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      technologies: ['Python', 'Tkinter', 'SQLite', 'Pandas'],
+      features: ['Real-time inventory tracking', 'Automated low stock alerts', 'Sales analytics dashboard', 'Barcode integration'],
+      liveDemo: '#',
+      github: '#',
+      category: 'Desktop Application'
     },
     {
-      icon: <Monitor className="w-8 h-8" />,
-      name: 'Desktop Applications',
-      description: 'Building robust desktop applications with modern UI/UX.',
-      projects: [
-        {
-          title: 'Inventory Management System',
-          description: 'Cross-platform desktop application for inventory tracking.',
-          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-        }
-      ]
+      title: 'Social Media Analytics Dashboard',
+      description: 'Web-based analytics platform for tracking social media performance across multiple platforms with automated reporting.',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      technologies: ['React', 'Django', 'PostgreSQL', 'Chart.js'],
+      features: ['Multi-platform integration', 'Real-time analytics', 'Custom dashboards', 'Automated reports'],
+      liveDemo: '#',
+      github: '#',
+      category: 'Web Application'
     },
     {
-      icon: <Robot className="w-8 h-8" />,
-      name: 'Python Automation',
-      description: 'Automating workflows and processes for increased efficiency.',
-      projects: []
+      title: 'IoT Home Automation System',
+      description: 'Smart home automation solution with mobile app control, voice commands, and energy monitoring capabilities.',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      technologies: ['Arduino', 'Raspberry Pi', 'Python', 'React Native'],
+      features: ['Voice control integration', 'Mobile app control', 'Energy monitoring', 'Remote access'],
+      liveDemo: '#',
+      github: '#',
+      category: 'IoT Solution'
     },
     {
-      icon: <Database className="w-8 h-8" />,
-      name: 'Full Stack Development',
-      description: 'Creating end-to-end applications using Django and React.',
-      projects: []
-    },
-    {
-      icon: <Cpu className="w-8 h-8" />,
-      name: 'Machine Learning',
-      description: 'Implementation of basic ML algorithms and data analysis.',
-      projects: []
-    },
-    {
-      icon: <Laptop className="w-8 h-8" />,
-      name: 'IoT',
-      description: 'Working with IoT devices and sensor integration.',
-      projects: [
-        {
-          title: 'Led-Blinking-using-fingers-with-cv2-and-pyfiramates',
-          description: 'This project uses computer vision to detect hand gestures and control LEDs connected to an Arduino board. It combines OpenCV, CVZone\'s hand tracking, and Python for real-time gesture-based interaction.',
-          image: 'https://raw.githubusercontent.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates/refs/heads/main/led_blinking.jpg',
-          video: 'https://github.com/varada-sandeep/Led-Blinking-using-fingers-with-cv2-and-pyfiramates.git',
-        }
-      ]
+      title: 'Machine Learning Customer Segmentation',
+      description: 'Advanced ML model for customer segmentation to enhance recommendation systems with improved accuracy.',
+      image: 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      technologies: ['Python', 'Scikit-learn', 'Pandas', 'Matplotlib'],
+      features: ['Advanced clustering algorithms', 'Data visualization', 'Performance metrics', 'Scalable architecture'],
+      liveDemo: '#',
+      github: '#',
+      category: 'Machine Learning'
     }
   ];
 
-  const services = [
+  const testimonials = [
     {
-      title: 'Custom Software Development',
-      description: 'Tailored software solutions for your specific needs.',
-      icon: <Code2 className="w-12 h-12" />
+      name: 'Sarah Johnson',
+      role: 'Project Manager, TechCorp',
+      content: 'Varada delivered exceptional work on our inventory management system. The solution exceeded our expectations and significantly improved our operational efficiency.',
+      rating: 5,
+      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80'
     },
     {
-      title: 'Process Automation',
-      description: 'Streamline your workflows with intelligent automation.',
-      icon: <Robot className="w-12 h-12" />
+      name: 'Michael Chen',
+      role: 'CTO, DataFlow Solutions',
+      content: 'Outstanding technical expertise and professional communication. The analytics dashboard Varada built has become an essential tool for our marketing team.',
+      rating: 5,
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80'
     },
     {
-      title: 'Full Stack Web Development',
-      description: 'End-to-end web applications with modern technologies.',
-      icon: <Monitor className="w-12 h-12" />
+      name: 'Emily Rodriguez',
+      role: 'Operations Director, SmartHome Inc',
+      content: 'Varada\'s IoT solution transformed our home automation offerings. The integration was seamless and the results speak for themselves.',
+      rating: 5,
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80'
+    }
+  ];
+
+  const achievements = [
+    {
+      title: 'IEEE Publication',
+      description: 'Published research on customer segmentation strategies for recommendation systems',
+      year: '2024',
+      icon: <BookOpen className="w-6 h-6" />
+    },
+    {
+      title: '15+ Successful Projects',
+      description: 'Completed diverse projects across multiple industries and technologies',
+      year: '2023-2024',
+      icon: <Briefcase className="w-6 h-6" />
+    },
+    {
+      title: 'Client Satisfaction',
+      description: '100% client satisfaction rate with repeat business and referrals',
+      year: 'Ongoing',
+      icon: <Star className="w-6 h-6" />
     }
   ];
 
   return (
-    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'} transition-colors duration-500`}>
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          style={{ y: y1, opacity }}
-          className="absolute inset-0"
-        >
-          {[...Array(8)].map((_, i) => (
+    <div className="min-h-screen bg-white text-gray-900">
+      {/* Header */}
+      <motion.header
+        style={{ opacity: headerOpacity }}
+        className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200"
+      >
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
             <motion.div
-              key={i}
-              className={`absolute rounded-full ${
-                isDarkTheme 
-                  ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20' 
-                  : 'bg-gradient-to-r from-purple-300/30 to-pink-300/30'
-              }`}
-              initial={{ scale: 0 }}
-              animate={{
-                scale: [1, 1.1, 1],
-                x: mousePosition.x * 5,
-                y: mousePosition.y * 5,
-              }}
-              transition={{
-                duration: 12,
-                repeat: Infinity,
-                delay: i * 0.8,
-              }}
-              style={{
-                width: Math.random() * 300 + 100,
-                height: Math.random() * 300 + 100,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-            />
-          ))}
-        </motion.div>
-      </div>
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+            >
+              Varada Sandeep
+            </motion.div>
 
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setIsDarkTheme(!isDarkTheme)}
-        className={`fixed top-4 right-4 z-50 p-3 rounded-full ${
-          isDarkTheme ? 'bg-yellow-500 text-gray-900' : 'bg-gray-800 text-white'
-        } transition-colors duration-300 shadow-lg`}
-      >
-        {isDarkTheme ? (
-          <Sun className="w-6 h-6" />
-        ) : (
-          <Moon className="w-6 h-6" />
-        )}
-      </motion.button>
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              {['Home', 'About', 'Skills', 'Portfolio', 'Experience', 'Contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className={`text-sm font-medium transition-colors hover:text-blue-600 ${
+                    activeSection === item.toLowerCase() ? 'text-blue-600' : 'text-gray-700'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.open('/resume.pdf', '_blank')}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300"
+              >
+                <Download className="w-4 h-4 inline mr-2" />
+                Resume
+              </motion.button>
+            </nav>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="min-h-screen flex items-center justify-center relative overflow-hidden"
-      >
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-white border-t border-gray-200"
+            >
+              <div className="container mx-auto px-4 py-4 space-y-4">
+                {['Home', 'About', 'Skills', 'Portfolio', 'Experience', 'Contact'].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className="block w-full text-left text-gray-700 hover:text-blue-600 transition-colors"
+                  >
+                    {item}
+                  </button>
+                ))}
+                <button
+                  onClick={() => window.open('/resume.pdf', '_blank')}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-medium w-full"
+                >
+                  <Download className="w-4 h-4 inline mr-2" />
+                  Download Resume
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
+
+      {/* Hero Section */}
+      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50"></div>
         <div className="container mx-auto px-4 z-10">
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
+          <div className="text-center max-w-4xl mx-auto">
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden ring-4 ring-purple-500 shadow-lg"
+              className="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden ring-4 ring-blue-500 shadow-xl"
             >
               <img
                 src="https://github.com/varada-sandeep/marks_revelar_automation/blob/main/images/team11.jpg?raw=true"
-                alt="Profile"
+                alt="Varada Sandeep"
                 className="w-full h-full object-cover"
               />
             </motion.div>
+
             <motion.h1
-              variants={nameAnimation}
-              initial="hidden"
-              animate="visible"
-              className={`text-6xl font-bold mb-6 ${
-                isDarkTheme
-                  ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                  : 'bg-gradient-to-r from-purple-600 to-pink-600'
-              } bg-clip-text text-transparent`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
             >
-              {["V", "a", "r", "a", "d", "a", " ", "S", "a", "n", "d", "e", "e", "p"].map((letter, index) => (
-                <motion.span
-                  key={index}
-                  variants={letterAnimation}
-                  className="inline-block"
-                  style={{ marginRight: letter === " " ? "0.5rem" : "0.1rem" }}
-                >
-                  {letter}
-                </motion.span>
-              ))}
+              Varada Sandeep
             </motion.h1>
+
             <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className={`text-xl ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'} max-w-2xl mx-auto`}
+              className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed"
             >
-              Specializing in Python Development, Automation, and Modern Web Applications
+              Python Developer & Automation Specialist crafting innovative solutions for modern challenges
             </motion.p>
-          </motion.div>
-        </div>
-      </motion.div>
 
-      <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 flex flex-col space-y-4">
-        <motion.a
-          href="https://github.com/varada-sandeep"
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.2, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          className={`p-3 rounded-full ${
-            isDarkTheme 
-              ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white' 
-              : 'bg-blue-600 text-white shadow-lg hover:bg-blue-700'
-          } transition-all duration-300`}
-        >
-          <Github className="w-6 h-6" />
-        </motion.a>
-        <motion.a
-          href="https://www.linkedin.com/in/varada-sandeep-a72446260/"
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.2, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          className={`p-3 rounded-full ${
-            isDarkTheme 
-              ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white' 
-              : 'bg-blue-600 text-white shadow-lg hover:bg-blue-700'
-          } transition-all duration-300`}
-        >
-          <Linkedin className="w-6 h-6" />
-        </motion.a>
-        <motion.a
-          href="https://www.instagram.com/sandeepvarada4/?__pwa=1"
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.2, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          className={`p-3 rounded-full ${
-            isDarkTheme 
-              ? 'bg-pink-500/20 text-pink-400 hover:bg-pink-500 hover:text-white' 
-              : 'bg-pink-600 text-white shadow-lg hover:bg-pink-700'
-          } transition-all duration-300`}
-        >
-          <Instagram className="w-6 h-6" />
-        </motion.a>
-      </div>
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className={`py-20 ${
-          isDarkTheme
-            ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
-            : 'bg-gradient-to-r from-purple-100/80 to-pink-100/80'
-        } backdrop-blur-lg`}
-      >
-        <div className="container mx-auto px-4">
-          <motion.h2
-            variants={slideFromLeft}
-            className={`text-4xl font-bold text-center mb-16 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-700 to-pink-700'
-            } bg-clip-text text-transparent`}
-          >
-            Publications
-          </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {publications.map((pub, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02 }}
-                className={`${
-                  isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
-                    : 'bg-white border border-purple-200 shadow-lg'
-                } rounded-lg p-8`}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => scrollToSection('portfolio')}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-medium hover:shadow-xl transition-all duration-300"
               >
-                <div className="flex items-start space-x-4">
-                  <div className={`p-3 rounded-lg ${
-                    isDarkTheme
-                      ? 'bg-blue-500/20 text-blue-400'
-                      : 'bg-purple-100 text-purple-600'
-                  }`}>
-                    <BookOpen className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className={`text-xl font-semibold mb-2 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                      {pub.title}
-                    </h3>
-                    <p className={`text-sm mb-2 ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                      {pub.journal} • {pub.year}
-                    </p>
-                    <p className={`mb-4 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
-                      {pub.description}
-                    </p>
-                    <a
-                      href={pub.link}
-                      className={`inline-flex items-center ${
-                        isDarkTheme
-                          ? 'text-blue-400 hover:text-blue-300'
-                          : 'text-purple-600 hover:text-purple-500'
-                      } transition-colors`}
-                    >
-                      <span className="mr-2">Read Paper</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                View My Work
+                <ArrowRight className="w-5 h-5 inline ml-2" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => scrollToSection('contact')}
+                className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition-all duration-300"
+              >
+                Get In Touch
+              </motion.button>
+            </motion.div>
+
+            {/* Social Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="flex justify-center space-x-6 mt-12"
+            >
+              {[
+                { icon: <Github className="w-6 h-6" />, url: 'https://github.com/varada-sandeep', label: 'GitHub' },
+                { icon: <Linkedin className="w-6 h-6" />, url: 'https://www.linkedin.com/in/varada-sandeep-a72446260/', label: 'LinkedIn' },
+                { icon: <Instagram className="w-6 h-6" />, url: 'https://www.instagram.com/sandeepvarada4/?__pwa=1', label: 'Instagram' }
+              ].map((social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2, y: -2 }}
+                  className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 text-gray-700 hover:text-blue-600"
+                  aria-label={social.label}
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
+            </motion.div>
           </div>
         </div>
-      </motion.div>
+      </section>
 
-      <motion.div
-        ref={ref}
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="py-20 relative overflow-hidden"
-      >
+      {/* About Section */}
+      <section id="about" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.h2
-            variants={itemVariants}
-            className={`text-4xl font-bold text-center mb-16 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-700 to-pink-700'
-            } bg-clip-text text-transparent`}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            My Skills
-          </motion.h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              About Me
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Passionate Developer & Problem Solver
+              </h3>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                I'm a dedicated Python developer with a passion for creating innovative solutions that make a real difference. 
+                With expertise spanning from desktop applications to IoT systems, I bring ideas to life through clean, 
+                efficient code and thoughtful design.
+              </p>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                My journey in technology has led me to work on diverse projects across multiple industries, 
+                always focusing on delivering high-quality solutions that exceed client expectations. 
+                I believe in the power of automation to transform businesses and improve lives.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-6 mt-8">
+                <div className="text-center p-4 bg-white rounded-lg shadow-md">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">15+</div>
+                  <div className="text-gray-600">Projects Completed</div>
+                </div>
+                <div className="text-center p-4 bg-white rounded-lg shadow-md">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">100%</div>
+                  <div className="text-gray-600">Client Satisfaction</div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <div className="bg-white p-8 rounded-2xl shadow-xl">
+                <h4 className="text-xl font-bold text-gray-900 mb-6">Key Expertise</h4>
+                <div className="space-y-4">
+                  {[
+                    { icon: <Code2 className="w-5 h-5" />, text: 'Python Development & Automation' },
+                    { icon: <Monitor className="w-5 h-5" />, text: 'Full-Stack Web Applications' },
+                    { icon: <Database className="w-5 h-5" />, text: 'Database Design & Management' },
+                    { icon: <Laptop className="w-5 h-5" />, text: 'IoT Solutions & Integration' },
+                    { icon: <Cpu className="w-5 h-5" />, text: 'Machine Learning & Data Analysis' },
+                    { icon: <Robot className="w-5 h-5" />, text: 'Process Automation & Optimization' }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <div className="p-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg text-blue-600">
+                        {item.icon}
+                      </div>
+                      <span className="text-gray-700">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section id="skills" className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Skills & Expertise
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              A comprehensive skill set built through years of hands-on experience and continuous learning
+            </p>
+          </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {skills.map((skill, index) => (
               <motion.div
                 key={index}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                className={`group relative ${
-                  isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/50 border border-blue-500/20'
-                    : 'bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 shadow-lg'
-                } backdrop-blur-sm rounded-lg p-6 cursor-pointer
-                          transform transition-all duration-300 hover:shadow-2xl ${
-                            isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
-                          }`}
-                onClick={() => setSelectedSkill(skill)}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <div className={`absolute inset-0 ${
-                  isDarkTheme 
-                    ? 'bg-gradient-to-r from-blue-500/10 to-purple-500/10' 
-                    : 'bg-gradient-to-r from-purple-500/5 to-pink-500/5'
-                } rounded-lg opacity-0 group-hover:opacity-100 transition-opacity`} />
-                <div className="relative">
-                  <div className="flex items-center mb-4">
-                    <div className={`${
-                      isDarkTheme
-                        ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400'
-                        : 'bg-gradient-to-r from-purple-200 to-pink-200 text-purple-600'
-                    } p-3 rounded-lg mr-4`}>
-                      {skill.icon}
-                    </div>
-                    <h3 className={`text-xl font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                      {skill.name}
-                    </h3>
+                <div className="flex items-center mb-4">
+                  <div className="p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg text-blue-600 mr-4">
+                    {skill.icon}
                   </div>
-                  <p className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
-                    {skill.description}
-                  </p>
+                  <h3 className="text-xl font-bold text-gray-900">{skill.name}</h3>
+                </div>
+                <div className="mb-2">
+                  <div className="flex justify-between text-sm text-gray-600 mb-1">
+                    <span>Proficiency</span>
+                    <span>{skill.level}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.level}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: index * 0.1 }}
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full"
+                    ></motion.div>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
-      </motion.div>
+      </section>
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="py-20"
-      >
+      {/* Portfolio Section */}
+      <section id="portfolio" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.h2
-            variants={slideFromLeft}
-            className={`text-4xl font-bold text-center mb-8 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-700 to-pink-700'
-            } bg-clip-text text-transparent`}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            Freelance Projects
-          </motion.h2>
-          <motion.p
-            variants={fadeInUp}
-            className={`text-center text-lg mb-16 max-w-3xl mx-auto ${
-              isDarkTheme ? 'text-gray-300' : 'text-gray-600'
-            }`}
-          >
-            Here are some of the successful projects I've completed for clients across various industries. 
-            Each project showcases different aspects of my technical expertise and problem-solving abilities.
-          </motion.p>
-          
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Featured Projects
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              A showcase of successful projects that demonstrate technical expertise and problem-solving capabilities
+            </p>
+          </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {freelanceProjects.map((project, index) => (
+            {projects.map((project, index) => (
               <motion.div
                 key={index}
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className={`${
-                  isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
-                    : 'bg-white border border-purple-200 shadow-lg'
-                } rounded-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl ${
-                  isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
-                }`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
               >
-                <div className="relative">
+                <div className="relative overflow-hidden">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium ${
-                    isDarkTheme
-                      ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                      : 'bg-green-100 text-green-700 border border-green-200'
-                  }`}>
-                    <CheckCircle className="w-3 h-3 inline mr-1" />
-                    {project.status}
+                  <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {project.category}
                   </div>
                 </div>
                 
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className={`text-xl font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                      {project.title}
-                    </h3>
-                    <span className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {project.year}
-                    </span>
-                  </div>
-                  
-                  <p className={`mb-4 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
-                    {project.description}
-                  </p>
-                  
-                  <div className="flex items-center mb-4 text-sm">
-                    <Users className={`w-4 h-4 mr-2 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
-                    <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
-                      {project.client}
-                    </span>
-                    <Clock className={`w-4 h-4 ml-4 mr-2 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
-                    <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
-                      {project.duration}
-                    </span>
-                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{project.title}</h3>
+                  <p className="text-gray-600 mb-4 leading-relaxed">{project.description}</p>
                   
                   <div className="mb-4">
-                    <h4 className={`text-sm font-medium mb-2 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Key Features:
-                    </h4>
-                    <div className="grid grid-cols-2 gap-1">
+                    <h4 className="text-sm font-semibold text-gray-900 mb-2">Key Features:</h4>
+                    <div className="grid grid-cols-1 gap-1">
                       {project.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center text-xs">
-                          <CheckCircle className={`w-3 h-3 mr-2 ${
-                            isDarkTheme ? 'text-green-400' : 'text-green-500'
-                          }`} />
-                          <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
-                            {feature}
-                          </span>
+                        <div key={featureIndex} className="flex items-center text-sm text-gray-600">
+                          <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                          {feature}
                         </div>
                       ))}
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, techIndex) => (
-                      <span
-                        key={techIndex}
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          isDarkTheme
-                            ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                            : 'bg-purple-100 text-purple-700 border border-purple-200'
-                        }`}
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                  <div className="mb-6">
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.map((tech, techIndex) => (
+                        <span
+                          key={techIndex}
+                          className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 rounded-full text-sm font-medium"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-4">
+                    <motion.a
+                      href={project.liveDemo}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg text-center font-medium hover:shadow-lg transition-all duration-300"
+                    >
+                      <Globe className="w-4 h-4 inline mr-2" />
+                      Live Demo
+                    </motion.a>
+                    <motion.a
+                      href={project.github}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 border-2 border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-center font-medium hover:border-blue-600 hover:text-blue-600 transition-all duration-300"
+                    >
+                      <Github className="w-4 h-4 inline mr-2" />
+                      Code
+                    </motion.a>
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
-          
+        </div>
+      </section>
+
+      {/* Experience & Achievements */}
+      <section id="experience" className="py-20">
+        <div className="container mx-auto px-4">
           <motion.div
-            variants={fadeInUp}
-            className={`mt-16 text-center p-8 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/20'
-                : 'bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200'
-            } rounded-lg`}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            <Briefcase className={`w-12 h-12 mx-auto mb-4 ${
-              isDarkTheme ? 'text-blue-400' : 'text-purple-600'
-            }`} />
-            <h3 className={`text-2xl font-bold mb-4 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-              Interested in Working Together?
-            </h3>
-            <p className={`mb-6 ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
-              I'm always open to discussing new projects and opportunities. Let's create something amazing together!
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-lg ${
-                  isDarkTheme
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
-                    : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
-                } text-white font-medium transform transition-all duration-300`}
-                onClick={() => {
-                  const subject = encodeURIComponent('Project Inquiry');
-                  const body = encodeURIComponent('Hi Varada,\n\nI have a project in mind and would like to discuss the details with you.\n\nThanks!');
-                  window.open(`mailto:sandeepvarada4@gmail.com?subject=${subject}&body=${body}`);
-                }}
-              >
-                <Mail className="w-5 h-5 inline mr-2" />
-                Email Me
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-lg border-2 ${
-                  isDarkTheme
-                    ? 'border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white'
-                    : 'border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white'
-                } font-medium transform transition-all duration-300`}
-                onClick={() => window.open('https://www.linkedin.com/in/varada-sandeep-a72446260/', '_blank')}
-              >
-                <Linkedin className="w-5 h-5 inline mr-2" />
-                LinkedIn
-              </motion.button>
-            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Experience & Achievements
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
           </motion.div>
-        </div>
-      </motion.div>
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className={`py-20 ${
-          isDarkTheme
-            ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
-            : 'bg-gradient-to-r from-purple-100/80 to-pink-100/80'
-        } backdrop-blur-lg`}
-      >
-        <div className="container mx-auto px-4">
-          <motion.h2
-            variants={slideFromRight}
-            className={`text-4xl font-bold text-center mb-16 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-700 to-pink-700'
-            } bg-clip-text text-transparent`}
-          >
-            Services
-          </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                variants={slideFromRight}
-                whileHover={{ scale: 1.05 }}
-                className={`${
-                  isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
-                    : 'bg-white border border-purple-200 shadow-lg'
-                } rounded-lg p-8 text-center
-                          transform transition-all duration-300 hover:shadow-2xl ${
-                            isDarkTheme ? 'hover:shadow-purple-500/20' : 'hover:shadow-purple-500/30'
-                          }`}
-              >
-                <div className={`${
-                  isDarkTheme
-                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400'
-                    : 'bg-gradient-to-r from-purple-200 to-pink-200 text-purple-600'
-                } p-4 rounded-full inline-block mb-6`}>
-                  {service.icon}
-                </div>
-                <h3 className={`text-xl font-semibold mb-4 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                  {service.title}
-                </h3>
-                <p className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
-                  {service.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className={`py-20 ${
-          isDarkTheme
-            ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
-            : 'bg-gradient-to-r from-purple-100/80 to-pink-100/80'
-        } backdrop-blur-lg`}
-      >
-        <div className="container mx-auto px-4">
-          <motion.h2
-            variants={slideFromLeft}
-            className={`text-4xl font-bold text-center mb-16 ${
-              isDarkTheme
-                ? 'bg-gradient-to-r from-blue-400 to-purple-600'
-                : 'bg-gradient-to-r from-purple-700 to-pink-700'
-            } bg-clip-text text-transparent`}
-          >
-            Get in Touch
-          </motion.h2>
-          <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Achievements */}
             <motion.div
-              variants={containerVariants}
-              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
             >
-              <motion.div
-                variants={slideFromLeft}
-                className={`${
-                  isDarkTheme
-                    ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20'
-                    : 'bg-white border border-purple-200 shadow-lg'
-                } rounded-lg p-8`}
-              >
-                <h3 className={`text-2xl font-semibold mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                  Contact Information
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <Mail className={`w-6 h-6 mr-4 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
-                    <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                      sandeepvarada4@gmail.com
-                    </p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">Professional Achievements</h3>
+              <div className="space-y-6">
+                {achievements.map((achievement, index) => (
+                  <div key={index} className="bg-white p-6 rounded-2xl shadow-lg">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg text-blue-600">
+                        {achievement.icon}
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">{achievement.title}</h4>
+                        <p className="text-gray-600 mb-2">{achievement.description}</p>
+                        <span className="text-sm text-blue-600 font-medium">{achievement.year}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <Phone className={`w-6 h-6 mr-4 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
-                    <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                      +91 93911 32531
-                    </p>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Testimonials */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">Client Testimonials</h3>
+              <div className="space-y-6">
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="bg-white p-6 rounded-2xl shadow-lg">
+                    <div className="flex items-center mb-4">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full mr-4"
+                      />
+                      <div>
+                        <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                        <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      </div>
+                      <div className="ml-auto flex">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-gray-700 italic">"{testimonial.content}"</p>
                   </div>
-                  <div className="flex items-center">
-                    <MapPin className={`w-6 h-6 mr-4 ${isDarkTheme ? 'text-blue-400' : 'text-purple-600'}`} />
-                    <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                      Chennai
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-              <motion.form
-                variants={slideFromRight}
-                className="space-y-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.target as HTMLFormElement);
-                  const name = formData.get('name') as string;
-                  const email = formData.get('email') as string;
-                  const message = formData.get('message') as string;
-                  console.log(name, email, message);
-                  axios.post('https://backend-2-anxj.onrender.com/send-email', {
-                    name,
-                    email,
-                    message,
-                  }, {
-                    headers: { 'Content-Type': 'application/json' }
-                  })
-                    .then(response => {
-                      alert(response.data.message);
-                    })
-                    .catch(error => {
-                      alert('Failed to send email. Please try again later.');
-                      console.error('Error sending email:', error);
-                    });
-                }}
-              >
-                <div>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Name"
-                    className={`w-full px-4 py-3 rounded-lg ${
-                      isDarkTheme
-                        ? 'bg-blue-900/20 border-blue-500/30 text-white placeholder-gray-400'
-                        : 'bg-white border-purple-200 text-gray-900 placeholder-gray-500'
-                    } border focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all`}
-                  />
-                </div>
-                <div>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Your Email"
-                    className={`w-full px-4 py-3 rounded-lg ${
-                      isDarkTheme
-                        ? 'bg-blue-900/20 border-blue-500/30 text-white placeholder-gray-400'
-                        : 'bg-white border-purple-200 text-gray-900 placeholder-gray-500'
-                    } border focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all`}
-                  />
-                </div>
-                <div>
-                  <textarea
-                    placeholder="Your Message"
-                    name="message"
-                    rows={4}
-                    className={`w-full px-4 py-3 rounded-lg ${
-                      isDarkTheme
-                        ? 'bg-blue-900/20 border-blue-500/30 text-white placeholder-gray-400'
-                        : 'bg-white border-purple-200 text-gray-900 placeholder-gray-500'
-                    } border focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all`}
-                  ></textarea>
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`w-full py-3 px-6 rounded-lg ${
-                    isDarkTheme
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
-                      : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
-                  } text-white transform transition-all duration-300`}
-                >
-                  Send Message
-                </motion.button>
-              </motion.form>
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
-      </motion.div>
+      </section>
 
-      <AnimatePresence>
-        {selectedSkill && (
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setSelectedSkill(null)}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Let's Work Together
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Ready to bring your ideas to life? Let's discuss how we can create something amazing together.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Information */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className={`${
-                isDarkTheme
-                  ? 'bg-gradient-to-br from-blue-900/90 to-purple-900/90 border border-blue-500/20'
-                  : 'bg-white border border-purple-200'
-              } rounded-lg p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto`}
-              onClick={e => e.stopPropagation()}
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-8"
             >
-              <div className="flex justify-between items-center mb-6">
-                <h3 className={`text-2xl font-bold ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                  {selectedSkill.name}
-                </h3>
-                <button
-                  onClick={() => setSelectedSkill(null)}
-                  className={`${isDarkTheme ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
-                >
-                  <X className="w-6 h-6" />
-                </button>
+              <div className="bg-white p-8 rounded-2xl shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Get In Touch</h3>
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg text-blue-600">
+                      <Mail className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Email</h4>
+                      <a href="mailto:sandeepvarada4@gmail.com" className="text-blue-600 hover:underline">
+                        sandeepvarada4@gmail.com
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg text-blue-600">
+                      <Phone className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Phone</h4>
+                      <a href="tel:+919391132531" className="text-blue-600 hover:underline">
+                        +91 93911 32531
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg text-blue-600">
+                      <MapPin className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Location</h4>
+                      <p className="text-gray-600">Chennai, India</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p className={isDarkTheme ? 'text-gray-300' : 'text-gray-700'}>
-                {selectedSkill.description}
-              </p>
-              {selectedSkill.projects.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                  {selectedSkill.projects.map((project, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className={`${
-                        isDarkTheme
-                          ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/50 border border-blue-500/20'
-                          : 'bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200'
-                      } rounded-lg overflow-hidden`}
-                    >
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="p-6">
-                        <h4 className={`text-xl font-semibold mb-2 ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
-                          {project.title}
-                        </h4>
-                        <p className={isDarkTheme ? 'text-gray-400' : 'text-gray-600'}>
-                          {project.description}
-                        </p>
-                        {project.video && (
-                          <a
-                            href={project.video}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`inline-flex items-center mt-4 ${
-                              isDarkTheme ? 'text-blue-400 hover:text-blue-300' : 'text-purple-600 hover:text-purple-500'
-                            } transition-colors`}
-                          >
-                            <ExternalLink className="w-4 h-4 mr-2" />
-                            Project Link/Project Video
-                          </a>
-                        )}
-                      </div>
-                    </motion.div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-lg">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Why Choose Me?</h3>
+                <div className="space-y-3">
+                  {[
+                    { icon: <Zap className="w-5 h-5" />, text: 'Fast turnaround times' },
+                    { icon: <Target className="w-5 h-5" />, text: 'Focused on your goals' },
+                    { icon: <TrendingUp className="w-5 h-5" />, text: 'Scalable solutions' },
+                    { icon: <CheckCircle className="w-5 h-5" />, text: '100% satisfaction guarantee' }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <div className="text-blue-600">{item.icon}</div>
+                      <span className="text-gray-700">{item.text}</span>
+                    </div>
                   ))}
                 </div>
-              ) : (
-                <p className={`text-center mt-8 ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                  No projects to display yet.
-                </p>
-              )}
+              </div>
             </motion.div>
-           </motion.div>
-        )}
-      </AnimatePresence>
 
-      <motion.div
-        className={`fixed bottom-4 right-4 w-12 h-12 rounded-full ${
-          isDarkTheme ? 'bg-blue-500' : 'bg-purple-600'
-        } flex items-center justify-center text-white text-sm font-bold shadow-lg`}
-        style={{
-          scaleY: scrollYProgress
-        }}
-      >
-        <motion.div
-          className="w-full h-full rounded-full border-4 border-white"
-          style={{
-            scaleY: scrollYProgress
-          }}
-        />
-      </motion.div>
+            {/* Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-white p-8 rounded-2xl shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Send a Message</h3>
+                <form className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Your Name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <input
+                        type="email"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                    <input
+                      type="text"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      placeholder="Project Discussion"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                    <textarea
+                      rows={5}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                      placeholder="Tell me about your project..."
+                    ></textarea>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-lg font-medium hover:shadow-lg transition-all duration-300"
+                  >
+                    <Send className="w-5 h-5 inline mr-2" />
+                    Send Message
+                  </motion.button>
+                </form>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+              Varada Sandeep
+            </div>
+            <p className="text-gray-400 mb-6">
+              Python Developer & Automation Specialist
+            </p>
+            <div className="flex justify-center space-x-6 mb-8">
+              {[
+                { icon: <Github className="w-6 h-6" />, url: 'https://github.com/varada-sandeep' },
+                { icon: <Linkedin className="w-6 h-6" />, url: 'https://www.linkedin.com/in/varada-sandeep-a72446260/' },
+                { icon: <Instagram className="w-6 h-6" />, url: 'https://www.instagram.com/sandeepvarada4/?__pwa=1' },
+                { icon: <Mail className="w-6 h-6" />, url: 'mailto:sandeepvarada4@gmail.com' }
+              ].map((social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2, y: -2 }}
+                  className="p-3 rounded-full bg-gray-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
+            </div>
+            <div className="border-t border-gray-800 pt-8">
+              <p className="text-gray-400">
+                © 2024 Varada Sandeep. All rights reserved. Built with React & Tailwind CSS.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
